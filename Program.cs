@@ -27,7 +27,6 @@ int food = 0;
 InitializeGame();
 while (!shouldExit)
 {
-    Move();
     if (TerminalResized())
     {
         Console.Clear();
@@ -36,13 +35,17 @@ while (!shouldExit)
     }
     else
     {
-        if (PlayerIsSick())
+        if (PlayerIsFaster())
+        {
+            Move(3, false);
+        }
+        else if (PlayerIsSick())
         {
             FreezePlayer();
         }
-        if (PlayerIsFaster())
+        else
         {
-            Move(3);
+            Move(otherKeysExit: false);
         }
         if (FoodConsumed())
         {
@@ -50,22 +53,6 @@ while (!shouldExit)
             ShowFood();
         }
     }
-}
-
-bool PlayerIsSick()
-{
-    return player.Equals(states[2]);
-}
-
-bool PlayerIsFaster()
-{
-    return player.Equals(states[1]);
-}
-
-
-bool FoodConsumed()
-{
-    return playerY == foodY && playerX == foodX;
 }
 
 // Returns true if the Terminal was resized 
@@ -88,6 +75,23 @@ void ShowFood()
     Console.SetCursorPosition(foodX, foodY);
     Console.Write(foods[food]);
 }
+
+bool PlayerIsSick()
+{
+    return player.Equals(states[2]);
+}
+
+bool PlayerIsFaster()
+{
+    return player.Equals(states[1]);
+}
+
+
+bool FoodConsumed()
+{
+    return playerY == foodY && playerX == foodX;
+}
+
 
 // Changes the player to match the food consumed
 void ChangePlayer()
@@ -156,3 +160,4 @@ void InitializeGame()
     Console.Write(player);
 
 }
+
